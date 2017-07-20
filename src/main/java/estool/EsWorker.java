@@ -101,7 +101,7 @@ public class EsWorker {
             requests.add(indexRequestBuilder);
             if(requests.size() == Limit){
                 cnt += Limit;
-                System.out.println("emit cnt="+cnt);
+                //System.out.println("emit cnt="+cnt);
                 processBulkRequests(requests);
                 requests.clear();
             }
