@@ -11,11 +11,14 @@ import java.util.List;
 public class MyGenerator {
 
     public static void main(String[] args) {
-        indexPerson();
+        String clusterName = "distribution_run";
+        String IP = "127.0.0.1";
+        int PORT = 9300;
+        EsWorker es = new EsWorker(clusterName, IP, PORT);
+        indexPerson(es);
     }
 
-    public static void indexPerson() {
-        EsWorker es = new EsWorker();
+    public static void indexPerson(EsWorker es) {
         String indexName = "ppc";
         String typeName = "ttc";
         if(!es.indexExists(indexName)){
@@ -24,7 +27,7 @@ public class MyGenerator {
         }
 
         long lastId = 0;
-        int num = 1000*1000*200; // 2e
+        int num = 1000*1000*300; // 3e
         long cnt = 0;
         final int pack = 2000;
         System.out.println("begin generate. lastId = "+lastId);
