@@ -9,4 +9,5 @@ public interface XCBuildable {
     XContentBuilder toXCB();
     String getId();
     String getParent(); // null if has no parent
+
 }

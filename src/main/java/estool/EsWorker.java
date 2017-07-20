@@ -1,5 +1,6 @@
 package estool;
 
+import item.Person;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
@@ -68,6 +69,17 @@ public class EsWorker {
         }
         return client.admin().indices().prepareCreate(name)
                 .addMapping(type, mappings, XContentType.JSON)
+                .setSettings(settings, XContentType.JSON)
+                .get().isAcknowledged();
+    }
+
+    public boolean createIndex(String name, String type, String settings, XContentBuilder mappings) {
+        if(indexExists(name)){
+            System.out.println("[error] createIndex already exists! indexName="+name);
+            return false;
+        }
+        return client.admin().indices().prepareCreate(name)
+                .addMapping(type, mappings)
                 .setSettings(settings, XContentType.JSON)
                 .get().isAcknowledged();
     }
@@ -168,7 +180,21 @@ public class EsWorker {
                 "            \"number_of_replicas\" : 1\n" +
                 "        }";
 
-        boolean ret = es.createIndex("sxsxsx", "mytype", settings, mappings);
-        System.out.println("ret="+ret);
+        String indexName = "ppc";
+        String typeName = "ttc";
+        if(!es.indexExists(indexName)){
+            System.out.println("[info] create index name="+indexName+", type="+typeName);
+            es.createIndex(indexName, typeName, Person.getSetting(), Person.getMapping());
+        }
+
+        List<XCBuildable> list = new ArrayList<XCBuildable>();
+        long lastId = 0;
+        for(long i=0; i<1000; i++){
+            Person p = new Person(i+lastId);
+            list.add(p);
+        }
+        es.bulkPutData(indexName, typeName, list);
+        //boolean ret = es.createIndex("sxsxsx", "mytype", settings, mappings);
+        //System.out.println("ret="+ret);
     }
 }
