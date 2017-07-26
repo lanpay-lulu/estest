@@ -40,7 +40,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>${maven_dependency_plugin_version}</version>
+                <version>3.0.1</version>
                 <executions>
                     <execution>
                         <id>copy</id>

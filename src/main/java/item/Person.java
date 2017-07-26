@@ -76,6 +76,7 @@ public class Person implements XCBuildable{
             contentBuilder.startObject()
                     .field("uid", uid)
                     .field("name", name)
+                    .field("desc", desc)
                     .field("idCardNumber", idCardNumber)
                     .field("mobileNumber", mobileNumber)
                     .field("gender", gender)
@@ -93,7 +94,7 @@ public class Person implements XCBuildable{
     {
         "properties" : {
             "uid" : { "type" : "long" },
-            "name" : { "type" : "keyword" },
+            "name" : { "type" : "keyword", "store" : true },
             "idCardNumber" : { "type" : "keyword" },
             "mobileNumber" : { "type" : "keyword" },
             "gender" : { "type" : "short" },
@@ -106,7 +107,7 @@ public class Person implements XCBuildable{
         return "{\n" +
                 "        \"properties\" : {\n" +
                 "            \"uid\" : { \"type\" : \"long\" },\n" +
-                "            \"name\" : { \"type\" : \"keyword\" },\n" +
+                "            \"name\" : { \"type\" : \"keyword\", \"store\" : true },\n" +
                 "            \"idCardNumber\" : { \"type\" : \"keyword\" },\n" +
                 "            \"mobileNumber\" : { \"type\" : \"keyword\" },\n" +
                 "            \"gender\" : { \"type\" : \"short\" },\n" +

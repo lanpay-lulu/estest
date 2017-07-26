@@ -1,0 +1,1 @@
+  java -Djava.ext.dirs="./target/lib/" -cp "./target/es-test-1.0-SNAPSHOT.jar" estool.MyGenerator

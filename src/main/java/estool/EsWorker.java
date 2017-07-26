@@ -1,6 +1,8 @@
 package estool;
 
 import item.Person;
+import org.elasticsearch.action.admin.cluster.allocation.ClusterAllocationExplainRequest;
+import org.elasticsearch.action.admin.cluster.allocation.ClusterAllocationExplainResponse;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
@@ -11,14 +13,19 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+
+import static org.elasticsearch.common.xcontent.ToXContent.EMPTY_PARAMS;
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 /**
  * Created by lanpay on 2017/7/19.
@@ -41,6 +48,23 @@ public class EsWorker {
         this.IP = IP;
         this.PORT = PORT;
         init();
+    }
+
+    public void getNodeInfo() {
+        ClusterAllocationExplainRequest request = new ClusterAllocationExplainRequest();
+        ClusterAllocationExplainResponse response = client.admin().cluster().allocationExplain(request).actionGet();
+
+        //client.admin().cluster().clusterStats();
+        //client.admin().cluster().nodesInfo();
+        //client.admin().cluster().nodesStats();
+
+        try {
+            XContentBuilder builder = jsonBuilder();
+            System.out.println(response.getExplanation().toXContent(builder, EMPTY_PARAMS));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            throw new RuntimeException("Error occured while creating product gift json document!", ex);
+        }
     }
 
     /**
@@ -165,8 +189,18 @@ public class EsWorker {
         }
     }
 
+    public static void testList() {
+        ArrayList<Integer> list = new ArrayList<Integer>(100);
+        list.set(99, 1327);
+        System.out.println("list(99)="+list.get(99));
+    }
 
     public static void main(String[] args) {
+        //EsWorker es = new EsWorker();
+        //es.getNodeInfo();
+    }
+
+    public static void main1(String[] args) {
         EsWorker es = new EsWorker();
         String mappings = "{\n" +
                 "                \"properties\" : {\n" +
